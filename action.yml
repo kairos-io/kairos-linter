@@ -1,0 +1,22 @@
+name: 'Kairos Linter'
+description: 'Linter to use across different Kairos repositories'
+inputs:
+  yaml:
+    description: 'Use yamllint'
+    required: true
+    default: false
+  yaml-dirs:
+    description: 'List of directories, separated by space, to look for sources'
+    required: false
+    default: './'
+runs:
+  using: "composite"
+  steps:
+    - name: Install earthly
+      uses: Luet-lab/luet-install-action@v1
+      with:
+        repository: quay.io/kairos/packages
+        packages: utils/earthly
+    - if: ${{ inputs.yaml }}
+      run: earthly +yamllint --DIRS=${{ inputs.yaml-dirs }}
+      shell: bash
