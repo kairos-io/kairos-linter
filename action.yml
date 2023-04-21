@@ -9,6 +9,10 @@ inputs:
     description: 'List of directories, separated by space, to look for sources'
     required: false
     default: './'
+  go:
+    description: 'Use golint'
+    required: true
+    default: false
 runs:
   using: "composite"
   steps:
@@ -19,4 +23,7 @@ runs:
         packages: utils/earthly
     - if: ${{ inputs.yaml }}
       run: earthly +yamllint --DIRS="${{ inputs.yaml-dirs }}"
+      shell: bash
+    - if: ${{ inputs.go }}
+      run: earthly +golint
       shell: bash
