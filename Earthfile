@@ -4,6 +4,8 @@ FROM alpine
 # renovate: datasource=docker depName=golang
 ARG GO_VERSION=1.20
 ARG GOLINT_VERSION=1.52.2
+# renovate: datasource=docker depName=hadolint/hadolint versioning=docker
+ARG HADOLINT_VERSION=2.12.0-alpine
 
 yamllint:
     FROM cytopia/yamllint
@@ -23,3 +25,15 @@ golint:
     WORKDIR /build
     COPY . .
     RUN golangci-lint run
+
+hadolint:
+    ARG HADOLINT_VERSION
+    ARG DIR
+    FROM hadolint/hadolint:$HADOLINT_VERSION
+    ENV IMAGES_DIR="$DIR"
+    IF [ "IMAGES_DIR" = "" ]
+        ENV IMAGES_DIR="images"
+    END
+    COPY $IMAGES_DIR .
+    RUN ls
+    RUN find . -name "Dockerfile*" -print | xargs -r -n1 hadolint

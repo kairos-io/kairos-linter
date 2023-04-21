@@ -13,6 +13,14 @@ inputs:
     description: 'Use golint'
     required: true
     default: false
+  hadolint:
+    description: 'Use hadolint'
+    required: true
+    default: false
+  hadolint-dir:
+    description: 'Directory to look for Dockerfiles'
+    required: false
+    default: 'images'
 runs:
   using: "composite"
   steps:
@@ -26,4 +34,7 @@ runs:
       shell: bash
     - if: ${{ inputs.go }}
       run: earthly +golint
+      shell: bash
+    - if: ${{ inputs.hadolint }}
+      run: earthly +hadolint --DIR=${{ inputs.hadolint-dir }}
       shell: bash
