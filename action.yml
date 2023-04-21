@@ -18,5 +18,5 @@ runs:
         repository: quay.io/kairos/packages
         packages: utils/earthly
     - if: ${{ inputs.yaml }}
-      run: earthly +yamllint --DIRS=${{ inputs.yaml-dirs }}
+      run: earthly +yamllint --DIRS="${{ inputs.yaml-dirs }}"
       shell: bash
